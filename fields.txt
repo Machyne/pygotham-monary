@@ -1,33 +1,35 @@
-User:
-    Id
-    Reputation
-    CreationDate
-    DisplayName
-    LastAccessDate
-    WebsiteUrl
-    Location
-    AboutMe
-    Views
-    UpVotes
-    DownVotes
-    AccountId
-
 Badges:
-    Id
+    _id
     UserId
     Name
     Date
 
 Comments:
-    Id
+    _id
     PostId
     Score
     Text
     CreationDate
     UserId
 
+PostHistory:
+    _id
+    PostHistoryTypeId
+    PostId
+    RevisionGUID
+    CreationDate
+    UserId
+    Text
+
+PostLinks:
+    _id
+    CreationDate
+    PostId
+    RelatedPostId
+    LinkTypeId
+
 Posts:
-    Id
+    _id
     PostTypeId
     AcceptedAnswerId
     CreationDate
@@ -44,31 +46,29 @@ Posts:
     CommentCount
     FavoriteCount
 
-Post History:
-    Id
-    PostHistoryTypeId
-    PostId
-    RevisionGUID
-    CreationDate
-    UserId
-    Text
-
-Post Links:
-    Id
-    CreationDate
-    PostId
-    RelatedPostId
-    LinkTypeId
-
 Tags:
-    Id
+    _id
     TagName
     Count
     ExcerptPostId
     WikiPostId
 
+Users:
+    _id
+    Reputation
+    CreationDate
+    DisplayName
+    LastAccessDate
+    WebsiteUrl
+    Location
+    AboutMe
+    Views
+    UpVotes
+    DownVotes
+    AccountId
+
 Votes:
-    Id
+    _id
     PostId
     VoteTypeId
     CreationDate
