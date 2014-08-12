@@ -4,4 +4,6 @@ killall mongod
 rm -rf ./data
 mkdir -p ./data/db
 mongod --dbpath ./data/db/ --logpath ./data/log --auth --fork
-mongoimport --db zips --collection data zips.json
+# note, you must fist get the superuser.com data from:
+# https://archive.org/download/stackexchange/superuser.com.7z
+python loader.py
