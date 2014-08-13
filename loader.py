@@ -1,0 +1,58 @@
+from os import path
+from datetime import datetime
+
+import pymongo
+
+
+def parse_trip_data(fname):
+    docs = []
+    time_format = "%Y-%m-%d %H:%M:%S"
+    with pymongo.MongoClient() as client:
+        with open(fname) as f:
+            f.readline()
+            for line in f:
+                (medallion, hack_license, vendor_id, rate_code,
+                 store_and_fwd_flag, pickup_time, drop_time, passenger_count,
+                 trip_time_in_secs, trip_distance, pickup_lng, pickup_lat,
+                 drop_lng, drop_lat) = line.split(',')
+                doc = {
+                    "medallion": medallion,
+                    "license": hack_license,
+                    "vendor": vendor_id,
+                    "rate_code": int(rate_code),
+                    "pickup_time": datetime.strptime(pickup_time, time_format),
+                    "drop_time": datetime.strptime(drop_time, time_format),
+                    "passengers": int(passenger_count),
+                    "trip_time": int(trip_time_in_secs),
+                    "distance": float(trip_distance),
+                    "pickup_loc": {"type": "Point",
+                                   "coordinates": [float(pickup_lat),
+                                                   float(pickup_lng)]},
+                    "drop_loc": {"type": "Point",
+                                 "coordinates": [float(drop_lat),
+                                                 float(drop_lng)]}}
+                docs.append(doc)
+                if len(docs) >= 4000:
+                    client.taxi.trips.insert(docs)
+                    docs = []
+
+
+def parse_trip_fare(fname):
+    pass
+
+data_files = ['trip_data_1.csv', 'trip_data_2.csv']
+fare_files = ['trip_fare_1.csv', 'trip_fare_2.csv']
+
+
+if __name__ == '__main__':
+    with pymongo.MongoClient() as client:
+        print('Removing old database.')
+        client.drop_database('taxi')
+    print('Inserting new documents...')
+    for fname in data_files:
+        print('\tParsing %s' % fname)
+        parse_trip_data(path.join('taxi', fname))
+    for fname in fare_files:
+        print('\tParsing %s' % fname)
+        parse_trip_fare(path.join('taxi', fname))
+    print('Done.')

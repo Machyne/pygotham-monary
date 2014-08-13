@@ -4,6 +4,6 @@ killall mongod
 rm -rf ./data
 mkdir -p ./data/db
 mongod --dbpath ./data/db/ --logpath ./data/log --auth --fork
-# note, you must fist get the superuser.com data from:
-# https://archive.org/download/stackexchange/superuser.com.7z
+# note, you must fist get the taxi data from:
+# http://www.andresmh.com/nyctaxitrips/
 python loader.py
