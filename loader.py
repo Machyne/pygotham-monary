@@ -3,14 +3,16 @@ from datetime import datetime
 
 import pymongo
 
+time_format = "%Y-%m-%d %H:%M:%S"
+
 
 def parse_trip_data(fname):
-    docs = []
-    time_format = "%Y-%m-%d %H:%M:%S"
+    documents = []
     with pymongo.MongoClient() as client:
-        with open(fname) as f:
-            f.readline()
-            for line in f:
+        db = client.taxi
+        with open(fname, "r") as fd:
+            fd.readline()
+            for line in fd:
                 (medallion, hack_license, vendor_id, rate_code,
                  store_and_fwd_flag, pickup_time, drop_time, passenger_count,
                  trip_time_in_secs, trip_distance, pickup_lng, pickup_lat,
@@ -39,30 +41,29 @@ def parse_trip_data(fname):
                                         float(drop_lng)]}
                 except:
                     pass
-                docs.append(doc)
-                if len(docs) >= 4000:
-                    client.taxi.trips.insert(docs)
-                    docs = []
-            client.taxi.trips.insert(docs)
+                documents.append(doc)
+                if len(documents) >= 4000:
+                    db.trips.insert(documents)
+                    documents = []
+            if len(documents) != 0:
+                db.trips.insert(documents)
 
 
 def parse_trip_fare(fname):
-    time_format = "%Y-%m-%d %H:%M:%S"
     documents = []
-
     with pymongo.MongoClient() as client:
         db = client.taxi
         with open(fname, "r") as fd:
-            f.readline()
+            fd.readline()
             for line in fd:
-                (medallion, hack_license, vendor_id, pickup_datetime,
-                        payment_type, fare_amount, surcharge, mta_tax,
-                        tip_amount, tolls_amount, total_amount) = line.strip().split(",")
+                (medallion, hack_license, vendor_id, pickup_time, payment_type,
+                 fare_amount, surcharge, mta_tax, tip_amount, tolls_amount,
+                 total_amount) = line.strip().split(",")
                 doc = {
                     "medallion": medallion,
                     "license": hack_license,
                     "vendor": vendor_id,
-                    "pickup_time": datetime.strptime(pickup_datetime, time_format),
+                    "pickup_time": datetime.strptime(pickup_time, time_format),
                     "payment_type": payment_type,
                     "fare_amount": float(fare_amount),
                     "surcharge": float(surcharge),
@@ -75,11 +76,12 @@ def parse_trip_fare(fname):
                 if len(documents) >= 4000:
                     db.fares.insert(documents)
                     documents = []
-            db.fares.insert(documents)
+            if len(documents) != 0:
+                db.fares.insert(documents)
 
 
-data_files = ['trip_data_1.csv', 'trip_data_2.csv']
-fare_files = ['trip_fare_1.csv', 'trip_fare_2.csv']
+data_files = ['trip_data_small.csv']
+fare_files = ['trip_fare_small.csv']
 
 
 if __name__ == '__main__':
