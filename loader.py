@@ -24,21 +24,31 @@ def parse_trip_data(fname):
                     "drop_time": datetime.strptime(drop_time, time_format),
                     "passengers": int(passenger_count),
                     "trip_time": int(trip_time_in_secs),
-                    "distance": float(trip_distance),
-                    "pickup_loc": {"type": "Point",
-                                   "coordinates": [float(pickup_lat),
-                                                   float(pickup_lng)]},
-                    "drop_loc": {"type": "Point",
-                                 "coordinates": [float(drop_lat),
-                                                 float(drop_lng)]}}
+                    "distance": float(trip_distance)}
+                try:
+                    doc["pickup_loc"] = {
+                        "type": "Point",
+                        "coordinates": [float(pickup_lat),
+                                        float(pickup_lng)]}
+                except:
+                    pass
+                try:
+                    doc["drop_loc"] = {
+                        "type": "Point",
+                        "coordinates": [float(drop_lat),
+                                        float(drop_lng)]}
+                except:
+                    pass
                 docs.append(doc)
                 if len(docs) >= 4000:
                     client.taxi.trips.insert(docs)
                     docs = []
+            client.taxi.trips.insert(docs)
 
 
 def parse_trip_fare(fname):
     pass
+
 
 data_files = ['trip_data_1.csv', 'trip_data_2.csv']
 fare_files = ['trip_fare_1.csv', 'trip_fare_2.csv']
