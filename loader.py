@@ -47,7 +47,35 @@ def parse_trip_data(fname):
 
 
 def parse_trip_fare(fname):
-    pass
+    time_format = "%Y-%m-%d %H:%M:%S"
+    documents = []
+
+    with pymongo.MongoClient() as client:
+        db = client.taxi
+        with open(fname, "r") as fd:
+            f.readline()
+            for line in fd:
+                (medallion, hack_license, vendor_id, pickup_datetime,
+                        payment_type, fare_amount, surcharge, mta_tax,
+                        tip_amount, tolls_amount, total_amount) = line.strip().split(",")
+                doc = {
+                    "medallion": medallion,
+                    "license": hack_license,
+                    "vendor": vendor_id,
+                    "pickup_time": datetime.strptime(pickup_datetime, time_format),
+                    "payment_type": payment_type,
+                    "fare_amount": float(fare_amount),
+                    "surcharge": float(surcharge),
+                    "mta_tax": float(mta_tax),
+                    "tip_amount": float(tip_amount),
+                    "tolls_amount": float(tolls_amount),
+                    "total_amount": float(total_amount)
+                }
+                documents.append(doc)
+                if len(documents) >= 4000:
+                    db.fares.insert(documents)
+                    documents = []
+            db.fares.insert(documents)
 
 
 data_files = ['trip_data_1.csv', 'trip_data_2.csv']
