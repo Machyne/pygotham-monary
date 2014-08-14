@@ -1,5 +1,7 @@
-pygotham-monary
-===============
+Our Monary talk for PyGotham
+============================
+
+[PyGotham link](http://pygotham.org/talks/50)
 
 Description
 -----------
