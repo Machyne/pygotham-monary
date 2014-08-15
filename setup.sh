@@ -5,7 +5,7 @@ rm -rf ./data
 mkdir -p ./data/db
 mongod --dbpath ./data/db/ --logpath ./data/log --fork
 
-if [[ ! -f "./taxi/trip_data_small.csv" || ! -f "./taxi/trip_fare_small.csv"]]; then
+if [[ ! -f "./taxi/trip_data_small.csv" || ! -f "./taxi/trip_fare_small.csv" ]]; then
     echo "note, you must fist get the taxi data from:"
     echo "http://www.andresmh.com/nyctaxitrips/"
     echo "We downloaded 1 file from each trip_data and trip_fares and took the first"
