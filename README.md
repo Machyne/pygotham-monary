@@ -1,7 +1,8 @@
-Our Monary talk for PyGotham
-============================
+Monary
+======
+Really Fast Analysis with NumPy and MongoDB.
 
-[PyGotham link](http://pygotham.org/talks/50)
+More details are available at [PyGotham](http://pygotham.org/talks/50).
 
 Description
 -----------
