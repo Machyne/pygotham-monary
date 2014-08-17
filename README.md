@@ -4,6 +4,10 @@ Really Fast Analysis with NumPy and MongoDB.
 
 More details are available at [PyGotham](http://pygotham.org/talks/50).
 
+**Note**: The demo contains features not yet released. To run the demo,
+download Monary from the
+[test PyPI site](https://testpypi.python.org/pypi/Monary/0.3.0).
+
 Description
 -----------
 NumPy arrays combine the speed of C with the convenience of Python. It is the
